@@ -60,7 +60,7 @@ class MultiHeadAttention(nn.Module):
 
         self.head_num = self.arg.head_num
 
-        self.softmax = nn.Softmax(3)
+        self.softmax = nn.Softmax(3)  # 即dim=-1,最后一维是src_len
 
     def forward(self, x, mask, pad_mask):
         cur_batch, seq_len, _ = x.shape
@@ -68,6 +68,7 @@ class MultiHeadAttention(nn.Module):
         copy_x = x
 
         # mutil-head attn
+        # (bs,seq_len,hidden_size)->(bs,num_heads,seq_len,per_head_size)
         q = self.Q(x)
         q = q.reshape(cur_batch, seq_len, self.head_num, -1)
         q = q.transpose(1, 2)
