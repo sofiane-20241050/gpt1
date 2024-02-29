@@ -32,7 +32,7 @@ class Feed_Forward(nn.Module):
         super().__init__()
         self.arg = arg
         self.linear1 = nn.Linear(self.arg.hidden_state, self.arg.hidden_state * 4)
-        self.relu = nn.GELU()
+        self.gelu = nn.GELU()
         self.linear2 = nn.Linear(self.arg.hidden_state * 4, self.arg.hidden_state)
 
         self.layer_norm = nn.LayerNorm(self.arg.hidden_state)
@@ -41,7 +41,7 @@ class Feed_Forward(nn.Module):
         # copy_x = copy.deepcopy(x)
         copy_x = x
         x = self.linear1(x)
-        x = self.relu(x)
+        x = self.gelu(x)
         x = self.linear2(x)
         x = copy_x + x
         x = self.layer_norm(x)
